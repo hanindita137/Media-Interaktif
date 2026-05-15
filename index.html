@@ -1,0 +1,420 @@
+import React, { useState } from 'react';
+import { 
+  Home, 
+  BookOpen, 
+  MonitorPlay, 
+  CheckSquare, 
+  Menu, 
+  X, 
+  ChevronRight,
+  Database,
+  Search,
+  ShieldCheck,
+  Leaf
+} from 'lucide-react';
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navigateTo = (tab) => {
+    setActiveTab(tab);
+    setIsMobileMenuOpen(false);
+  };
+
+  const navItems = [
+    { id: 'home', label: 'Beranda', icon: <Home size={20} /> },
+    { id: 'materi', label: 'Materi Belajar', icon: <BookOpen size={20} /> },
+    { id: 'simulasi', label: 'Simulasi Praktik', icon: <MonitorPlay size={20} /> },
+    { id: 'kuis', label: 'Evaluasi / Kuis', icon: <CheckSquare size={20} /> },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+      {/* Navigation Bar */}
+      <nav className="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-2">
+              <Database size={28} className="text-blue-200" />
+              <span className="text-xl font-bold tracking-wider">ArsipEdu<span className="text-blue-300">.</span></span>
+            </div>
+            
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => navigateTo(item.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
+                    activeTab === item.id 
+                      ? 'bg-blue-800 text-white' 
+                      : 'hover:bg-blue-600 text-blue-100'
+                  }`}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-blue-100 hover:text-white"
+              >
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-blue-800 pb-4 px-4 shadow-inner">
+            <div className="flex flex-col space-y-2 pt-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => navigateTo(item.id)}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-left ${
+                    activeTab === item.id 
+                      ? 'bg-blue-900 text-white' 
+                      : 'text-blue-100 hover:bg-blue-700'
+                  }`}
+                >
+                  {item.icon}
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        {activeTab === 'home' && <HomeView onNavigate={navigateTo} />}
+        {activeTab === 'materi' && <MateriView />}
+        {activeTab === 'simulasi' && <SimulasiView />}
+        {activeTab === 'kuis' && <KuisView />}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-8 text-center mt-12">
+        <p>© 2026 EduArsip - Media Pembelajaran Kearsipan Digital.</p>
+        <p className="text-sm mt-2">Dibuat untuk keperluan simulasi pendidikan interaktif.</p>
+      </footer>
+    </div>
+  );
+};
+
+/* --- TAB VIEWS --- */
+
+const HomeView = ({ onNavigate }) => (
+  <div className="space-y-12">
+    {/* Hero Section */}
+    <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-slate-200 flex flex-col md:flex-row items-center gap-8">
+      <div className="flex-1 space-y-6">
+        <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 font-semibold rounded-full text-sm">
+          Selamat Datang di ArsipEdu
+        </div>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+          Kuasai Era Baru <span className="text-blue-600">Kearsipan Digital</span>
+        </h1>
+        <p className="text-lg text-slate-600 leading-relaxed">
+          Pelajari konsep dasar, manajemen, dan praktik langsung pengelolaan arsip secara digital. Tingkatkan efisiensi dan keamanan data di era modern.
+        </p>
+        <div className="flex flex-wrap gap-4 pt-2">
+          <button 
+            onClick={() => onNavigate('materi')}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center transition-colors"
+          >
+            Mulai Belajar <ChevronRight size={20} className="ml-1" />
+          </button>
+          <button 
+            onClick={() => onNavigate('simulasi')}
+            className="px-6 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg font-medium flex items-center transition-colors"
+          >
+            Coba Simulasi <MonitorPlay size={20} className="ml-2 text-slate-500" />
+          </button>
+        </div>
+      </div>
+      <div className="flex-1 w-full flex justify-center">
+        <div className="relative w-full max-w-sm aspect-square bg-blue-50 rounded-full flex items-center justify-center p-8">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/3214/3214795.png" 
+              alt="Ilustrasi Kearsipan Digital" 
+              className="w-full h-full object-contain drop-shadow-xl animate-pulse-slow"
+              style={{animation: 'pulse 3s infinite ease-in-out'}}
+            />
+        </div>
+      </div>
+    </div>
+
+    {/* Feature Highlights */}
+    <div className="grid md:grid-cols-3 gap-6">
+      {[
+        { title: 'Akses Cepat', icon: <Search size={32} className="text-indigo-500"/>, desc: 'Temukan dokumen dalam hitungan detik tanpa membongkar tumpukan kertas.' },
+        { title: 'Keamanan Data', icon: <ShieldCheck size={32} className="text-emerald-500"/>, desc: 'Arsip terenkripsi dan terlindungi dari kerusakan fisik seperti kebakaran atau rayap.' },
+        { title: 'Ramah Lingkungan', icon: <Leaf size={32} className="text-green-500"/>, desc: 'Mengurangi penggunaan kertas (paperless) untuk keberlanjutan lingkungan.' },
+      ].map((feature, idx) => (
+        <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center space-y-4 hover:shadow-md transition-shadow">
+          <div className="p-4 bg-slate-50 rounded-full">
+            {feature.icon}
+          </div>
+          <h3 className="text-xl font-bold text-slate-800">{feature.title}</h3>
+          <p className="text-slate-600">{feature.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const MateriView = () => {
+  const materi = [
+    {
+      title: "1. Pengertian Kearsipan Digital",
+      content: "Kearsipan digital adalah proses penciptaan, penyimpanan, pengelolaan, dan penemuan kembali informasi yang terekam dalam format elektronik. Berbeda dengan arsip konvensional yang berwujud kertas, arsip digital memanfaatkan perangkat keras (komputer/server) dan perangkat lunak (aplikasi/sistem informasi)."
+    },
+    {
+      title: "2. Mengapa Perlu Digitalisasi Arsip?",
+      content: "Digitalisasi mengubah dokumen fisik menjadi file digital (misalnya melalui proses scanning). Tujuannya meliputi: menyelamatkan fisik dokumen asli yang rapuh, mempercepat proses temu balik (retrieval), menghemat ruang penyimpanan fisik, dan memudahkan pembagian dokumen antar divisi atau instansi secara cepat."
+    },
+    {
+      title: "3. Daur Hidup Arsip Digital",
+      content: "Siklus arsip digital meliputi:\n- Penciptaan: Membuat atau menerima dokumen digital (email, file word, scan pdf).\n- Penggunaan & Penyimpanan: Menyimpan arsip di server/cloud dan menggunakannya untuk operasional aktif.\n- Pemeliharaan: Memastikan integritas data, backup rutin, dan keamanan file.\n- Penyusutan: Menghapus arsip yang sudah habis masa retensinya atau memindahkannya ke arsip statis untuk nilai sejarah."
+    },
+    {
+      title: "4. Manajemen Akses & Keamanan",
+      content: "Arsip digital membutuhkan manajemen akses yang ketat. Tidak semua orang boleh mengakses dokumen rahasia. Fitur seperti password, pembatasan hak akses (Read, Write, Admin), serta enkripsi data sangat penting untuk mencegah kebocoran informasi yang berharga bagi organisasi."
+    }
+  ];
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="text-center space-y-4">
+        <h2 className="text-3xl font-bold text-slate-900">Materi Kearsipan Digital</h2>
+        <p className="text-slate-600 max-w-2xl mx-auto">Pelajari teori dasar sebelum mempraktikkan simulasi pengelolaan arsip.</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {materi.map((item, index) => (
+          <div key={index} className="bg-white p-8 rounded-xl shadow-sm border border-l-4 border-l-blue-500 border-slate-200">
+            <h3 className="text-xl font-bold text-slate-800 mb-4">{item.title}</h3>
+            <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+              {item.content}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SimulasiView = () => {
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Simulasi Input Arsip Digital</h2>
+            <p className="text-slate-600">
+              Gunakan formulir simulasi di bawah ini untuk mempraktikkan proses pencatatan atau input metadata arsip ke dalam sistem.
+            </p>
+          </div>
+          <a 
+            href="https://script.google.com/a/macros/student.uny.ac.id/s/AKfycbyBCkeAIVXUg7NeU1UUEb3ZmSqyUekRb324uvjLqF6Nun9TYWn0VnTdq2muL7-Gerzz8g/exec" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg font-medium text-sm flex-shrink-0 transition-colors whitespace-nowrap"
+          >
+            Buka di Tab Baru ↗
+          </a>
+        </div>
+
+        {/* Warning if the iframe requires Google Login from the domain */}
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <MonitorPlay className="h-5 w-5 text-yellow-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                <strong>Catatan:</strong> Jika form di bawah tidak muncul atau meminta login, pastikan Anda telah login menggunakan akun Google / akun institusi (<em>@student.uny.ac.id</em>) pada browser Anda, atau gunakan tombol "Buka di Tab Baru" di atas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Simulasi Iframe Container */}
+        <div className="w-full h-[650px] bg-slate-100 rounded-lg border-2 border-slate-300 overflow-hidden shadow-inner relative">
+            <div className="absolute inset-0 flex items-center justify-center -z-0">
+               <span className="text-slate-400 animate-pulse">Memuat Form Simulasi...</span>
+            </div>
+            <iframe
+              src="https://script.google.com/a/macros/student.uny.ac.id/s/AKfycbyBCkeAIVXUg7NeU1UUEb3ZmSqyUekRb324uvjLqF6Nun9TYWn0VnTdq2muL7-Gerzz8g/exec"
+              className="w-full h-full relative z-10"
+              frameBorder="0"
+              title="Formulir Simulasi Kearsipan UNY"
+              allowFullScreen
+            />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const KuisView = () => {
+  const questions = [
+    {
+      q: "Apa keuntungan utama dari sistem kearsipan digital dibandingkan arsip fisik?",
+      options: [
+        "Membutuhkan lemari yang lebih besar",
+        "Rentan dimakan rayap",
+        "Pencarian dokumen (retrieval) jauh lebih cepat",
+        "Hanya bisa diakses oleh satu orang pada satu waktu"
+      ],
+      answer: 2
+    },
+    {
+      q: "Proses mengubah dokumen kertas menjadi file komputer (misal PDF) disebut...",
+      options: [
+        "Digitalisasi / Scanning",
+        "Penyusutan Arsip",
+        "Enkripsi Data",
+        "Klasifikasi Arsip"
+      ],
+      answer: 0
+    },
+    {
+      q: "Tahap akhir dalam daur hidup arsip, di mana arsip yang tidak berguna dihancurkan atau arsip sejarah disimpan permanen, disebut tahap:",
+      options: [
+        "Penciptaan",
+        "Pemeliharaan",
+        "Distribusi",
+        "Penyusutan (Disposition)"
+      ],
+      answer: 3
+    },
+    {
+      q: "Untuk menjaga arsip digital rahasia agar tidak bisa dibaca oleh orang yang tidak berwenang, teknologi yang paling tepat digunakan adalah...",
+      options: [
+        "Menyimpannya di flashdisk",
+        "Enkripsi dan Password",
+        "Mencetaknya kembali ke kertas",
+        "Menyebarkannya via WhatsApp"
+      ],
+      answer: 1
+    }
+  ];
+
+  const [currentQ, setCurrentQ] = useState(0);
+  const [selectedOpt, setSelectedOpt] = useState(null);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleNext = () => {
+    if (selectedOpt === questions[currentQ].answer) {
+      setScore(score + 1);
+    }
+
+    if (currentQ < questions.length - 1) {
+      setCurrentQ(currentQ + 1);
+      setSelectedOpt(null);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQ(0);
+    setSelectedOpt(null);
+    setScore(0);
+    setShowResult(false);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+        {!showResult ? (
+          <>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold text-slate-800">Evaluasi Pemahaman</h2>
+              <span className="bg-blue-100 text-blue-800 py-1 px-3 rounded-full font-medium text-sm">
+                Pertanyaan {currentQ + 1} / {questions.length}
+              </span>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-medium text-slate-800 mb-6 leading-relaxed">
+                {questions[currentQ].q}
+              </h3>
+              <div className="space-y-3">
+                {questions[currentQ].options.map((opt, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedOpt(idx)}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
+                      selectedOpt === idx 
+                        ? 'border-blue-500 bg-blue-50 text-blue-800 shadow-sm' 
+                        : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-4 ${
+                        selectedOpt === idx ? 'border-blue-500 bg-blue-500' : 'border-slate-300'
+                      }`}>
+                        {selectedOpt === idx && <div className="w-2 h-2 rounded-full bg-white" />}
+                      </div>
+                      {opt}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={handleNext}
+              disabled={selectedOpt === null}
+              className={`w-full py-4 rounded-xl font-bold text-lg transition-colors ${
+                selectedOpt !== null 
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+              }`}
+            >
+              {currentQ === questions.length - 1 ? 'Selesaikan Kuis' : 'Lanjut ke Pertanyaan Berikutnya'}
+            </button>
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckSquare className="w-12 h-12 text-green-500" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-800 mb-4">Kuis Selesai!</h2>
+            <p className="text-lg text-slate-600 mb-6">
+              Anda menjawab benar <span className="font-bold text-blue-600">{score}</span> dari <span className="font-bold">{questions.length}</span> pertanyaan.
+            </p>
+            
+            <div className="w-full bg-slate-100 rounded-full h-4 mb-8 overflow-hidden">
+              <div 
+                className={`h-4 rounded-full ${score === questions.length ? 'bg-green-500' : 'bg-blue-500'}`} 
+                style={{ width: `${(score / questions.length) * 100}%` }}
+              ></div>
+            </div>
+
+            <button
+              onClick={resetQuiz}
+              className="px-8 py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-lg font-medium transition-colors"
+            >
+              Ulangi Kuis
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
